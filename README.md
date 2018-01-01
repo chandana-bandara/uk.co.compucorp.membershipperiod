@@ -2,14 +2,14 @@
 
 ![Screenshot](/images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+This extension records membership periods/terms relevant data in separate entity when creating or renewing a membership. The recorded details are observable through membership "View" pop-up interface.
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v5.4+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM 4.7.28
 
 ## Installation (Web UI)
 
@@ -22,7 +22,7 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 
 ```bash
 cd <extension-dir>
-cv dl uk.co.compucorp.membershipperiod@https://github.com/FIXME/uk.co.compucorp.membershipperiod/archive/master.zip
+cv dl uk.co.compucorp.membershipperiod@https://github.com/coolbit/uk.co.compucorp.membershipperiod/archive/master.zip
 ```
 
 ## Installation (CLI, Git)
@@ -36,9 +36,13 @@ cv en membershipperiod
 ```
 
 ## Usage
+The flow of membership creation and renewal are not altered in any way from the user's perspective. In order to view the recorded membership periods,
+1. Log in to CiviCRM
+2. Visit in main menu, Memberships -> Find Memberships
+3. Find the target membership
+4. Click on "View" membership link in the result membership row
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
+In the membership view pop-up, there should be a separate section called "Membership Period Details" with the membership period details of the selected member
 
 ## Known Issues
-
-(* FIXME *)
+The membership period details will not change when "Edit" memberships (not Renewals). The edit interfaces allows manual membership start and end date edits and that gets complicated with the membership history. The implementation needs a technical and logical conversation with the core team to finalize a suitable logic.
