@@ -11,38 +11,8 @@ use CRM_Membershipperiod_BAO_MembershipPeriodDetail as MembershipPeriodDetail;
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_membership_period_detail_getformember_spec(&$spec) {
-  // $spec['magicword']['api.required'] = 1;
   $spec['membership_id']['api.required'] = 1;
 }
-
-/**
- * MembershipPeriodDetail.Getformember API
- *
- * @param array $params
- * @return array API result descriptor
- * @see civicrm_api3_create_success
- * @see civicrm_api3_create_error
- * @throws API_Exception
- *
-function civicrm_api3_membership_period_detail_Getformember($params) {
-  if (array_key_exists('magicword', $params) && $params['magicword'] == 'sesame') {
-    $returnValues = array(
-      // OK, return several data rows
-      12 => array('id' => 12, 'name' => 'Twelve'),
-      34 => array('id' => 34, 'name' => 'Thirty four'),
-      56 => array('id' => 56, 'name' => 'Fifty six'),
-    );
-    // ALTERNATIVE: $returnValues = array(); // OK, success
-    // ALTERNATIVE: $returnValues = array("Some value"); // OK, return a single value
-
-    // Spec: civicrm_api3_create_success($values = 1, $params = array(), $entity = NULL, $action = NULL)
-    return civicrm_api3_create_success($returnValues, $params, 'NewEntity', 'NewAction');
-  }
-  else {
-    throw new API_Exception( 'Everyone knows that the magicword is "sesame"', 1234);
-  }
-} */
-
 
 /**
  * MembershipPeriodDetail.get API
@@ -137,7 +107,9 @@ function civicrm_api3_membership_period_detail_getformember($params) {
           $periods []= $tmpPeriod;
 
           $tmpEndDate->add(new \DateInterval('P1D'));
-          $startDate = $tmpEndDate->format('Y-m-d'); /* Current period's end date is the start date for the next period. Still inside the loop. */
+
+          /* Current period's end date is the start date for the next period. Still inside the loop. */
+          $startDate = $tmpEndDate->format('Y-m-d'); 
         }
 
         /* After calculating all intermediate periods, the end dates must be tally */

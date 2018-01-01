@@ -126,18 +126,16 @@ function membershipperiod_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
 // --- Functions below this ship commented out. Uncomment as required. ---
 
 
-
-
-
 /**
- * Implements hook_civicrm_post().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_post/
+ * Implements hook_civicrm_apiWrappers() to map the class name with entity.
  */
-// function membershipperiod_civicrm_post($op, $objectName, $objectId, &$objectRef){
-// }
-
-
+function membershipperiod_civicrm_entityTypes(&$entityTypes) {
+	$entityTypes['CRM_Membershipperiod_DAO_MembershipPeriodDetail'] = array(
+		'name'  => 'MembershipPeriodDetail',
+		'class' => 'CRM_Membershipperiod_DAO_MembershipPeriodDetail',
+		'table' => 'civicrm_membership_period_detail',
+	);
+}
 
 /**
  * Implements hook_civicrm_preProcess().
@@ -145,8 +143,6 @@ function membershipperiod_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
  */
 function membershipperiod_civicrm_preProcess($formName, &$form) {
-	//echo "MMM =>".$formName;
-
 	/* Taking the url path of the request */
 	if (is_a($form, 'CRM_Member_Form_MembershipRenewal')){
 
@@ -308,9 +304,6 @@ function membershipperiod_civicrm_postProcess($formName, &$form) {
     			'membership_type_id' => $membershipTypeId,
     			'currency_code' => $currencyCode
     		);
-    		// echo "=>";
-    		// print_r($saveData);
-    		// die();
     		$result = civicrm_api3('MembershipPeriodDetail', 'create', $saveData);
 
     		if ($result['is_error'] == 0){
@@ -323,36 +316,6 @@ function membershipperiod_civicrm_postProcess($formName, &$form) {
 
 
 /**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function membershipperiod_civicrm_navigationMenu(&$menu) {
-  _membershipperiod_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => E::ts('The Page'),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _membershipperiod_civix_navigationMenu($menu);
-} // */
-
-
-/**
- * Implements hook_civicrm_apiWrappers() to map the class name with entity.
- */
-function membershipperiod_civicrm_entityTypes(&$entityTypes) {
-	$entityTypes['CRM_Membershipperiod_DAO_MembershipPeriodDetail'] = array(
-		'name'  => 'MembershipPeriodDetail',
-		'class' => 'CRM_Membershipperiod_DAO_MembershipPeriodDetail',
-		'table' => 'civicrm_membership_period_detail',
-	);
-}
-
-
-/**
  * Modifies the membership view popup form to show the membership periods
  * @param  String &$content The existing content of the page/form
  * @param  String $context  Contex of the page/form (e.g. page)
@@ -361,11 +324,7 @@ function membershipperiod_civicrm_entityTypes(&$entityTypes) {
  * @return void
  */
 function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &$object ) {
-	
 	if ($tplName == "CRM/Member/Page/Tab.tpl"){
-		
-		// $content .= serialize($object);
-
 		$action = @$object->getVar('_action');
 
 		if ($action == 4){
@@ -374,7 +333,6 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 				'sequential' => 1,
 				'membership_id' => $membershipId,
 			));
-
 
 			$membershipPeriods = $MembershipPeriodDetails['values'];
 
@@ -421,9 +379,6 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 			} else {
 				$defaultCurrencyCode = "USD";
 			}
-			
-			//echo "=>".$config->defaultCurrency;
-			//print_r($currencySymbol);
 			foreach ($membershipPeriods as $index => $p){
 
 				$multipleDurationIndicator = "";
