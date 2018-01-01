@@ -134,25 +134,8 @@ function membershipperiod_civicrm_alterSettingsFolders(&$metaDataFolders = NULL)
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_post/
  */
-function membershipperiod_civicrm_post($op, $objectName, $objectId, &$objectRef){
-
-	// echo "OP = ";
-	// print_r($op);
-
-	// echo "Object Name = ";
-
-	// print_r($objectName);
-
-	// echo "Object Id ";
-
-	// print_r($objectId);
-
- 
-	// echo "Object Ref ";
-	// print_r($objectRef);
-	
-
-}
+// function membershipperiod_civicrm_post($op, $objectName, $objectId, &$objectRef){
+// }
 
 
 
@@ -198,8 +181,6 @@ function membershipperiod_civicrm_preProcess($formName, &$form) {
  * @param CRM_Core_Form $form
  */
 function membershipperiod_civicrm_postProcess($formName, &$form) {
-
-	
 	
 	/* Taking the url path of the request */
 	$urlPath = @$form->getVar('urlPath');
@@ -385,13 +366,8 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 		
 		$action = @$object->getVar('_action');
 
-		//$content = $membershipId."<=".$content;
-
 		if ($action == 4){
-			// $membershipPeriodDetailsFileName = "/var/www/html/sites/default/files/civicrm/ext/uk.co.compucorp.membershipperiod/templates/CRM/Member/Form/MembershipPeriodView.tpl";
-
 			$membershipId = @$object->getVar('_id');
-
 			$MembershipPeriodDetails = civicrm_api3('MembershipPeriodDetail', 'getformember', array(
 				'sequential' => 1,
 				'membership_id' => $membershipId,
@@ -399,42 +375,42 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 
 
 			$membershipPeriods = $MembershipPeriodDetails['values'];
-			// $title = E::ts(__("Membership Period Details"));
 
-			$appendText = <<<EOT
-			<div class="crm-accordion-wrapper">
-			<div class="crm-accordion-header">Membership Period Details</div>
-			<div class="crm-accordion-body">
-			<table class="selector row-highlight">
-			<thead class="sticky">
-			<tr>
-			<th scope="col">
-			No.
-			</th>
-			<th>
-			Start Date
-			</th>
-			<th>
-			End Date
-			</th>
-			<th>
-			Membership
-			</th>
-			<th>
-			Term Duration
-			</th>
-			<th>
-			Contribution
-			</th>
-			<th>
-			Created
-			</th>
-			</tr>
-			</thead>
-			<tbody>
-EOT;
+			$appendText  = '
+				<div class="crm-container">
+					<div class="class="crm-block crm-content-block crm-membership-view-form-block">
+						<div class="crm-accordion-wrapper">
+							<div class="crm-accordion-header">'.E::ts('Membership Period Details').'</div>
+							<div class="crm-accordion-body">
+								<table class="selector row-highlight">
+									<thead class="sticky">
+										<tr>
+											<th scope="col">
+												'.E::ts('No.').'
+											</th>
+											<th>
+												'.E::ts('Start Date').'
+											</th>
+											<th>
+												'.E::ts('End Date').'
+											</th>
+											<th>
+												'.E::ts('Membership').'
+											</th>
+											<th>
+												'.E::ts('Term Duration').'
+											</th>
+											<th>
+												'.E::ts('Contribution').'
+											</th>
+											<th>
+												'.E::ts('Created').'
+											</th>
+										</tr>
+									</thead>
+									<tbody>';
+
 			$sequence = 1;
-			// $moneySymbol = CRM_Utils_Type::$currency;
 			$config = CRM_Core_Config::singleton();
 			
 			if (is_object($config)){
@@ -447,12 +423,10 @@ EOT;
 			//print_r($currencySymbol);
 			foreach ($membershipPeriods as $index => $p){
 
-				
 				$multipleDurationIndicator = "";
 				if ($p['membership_duration_interval'] >1){
 					$multipleDurationIndicator = "s";
 				}
-
 
 				if ($p['currency_code'] !=""){
 					$currencyCode = $p['currency_code'];
@@ -463,7 +437,6 @@ EOT;
 				
 				/* Whether the contribution made for multiple membership periods */
 				$shared = ($p['shared_contribution'] == 1) ? "(Shared)" : "";
-				
 
 				$startDateObj = new \DateTime($p['start_date']);
 				$startDate = $startDateObj->format('D jS \of M Y');
@@ -473,33 +446,31 @@ EOT;
 				$createdDateObj = new \DateTime($p['created_at']);
 				$createdDate = $createdDateObj->format('D jS \of M Y');
 
-				$appendText .= <<<EOT
-				<tr class="odd-row">
-				<td>$sequence</td>
-				<td>{$startDate}</td>
-				<td>{$endDate}</td>
-				<td>{$p['membership_type_id.name']}</td>
-				<td>{$p['membership_duration_interval']} {$p['membership_duration_unit']}{$multipleDurationIndicator} </td>
-				<td>
-					<a href="/civicrm/contact/view/contribution?reset=1&id={$p['contribution_id']}&action=view&context=contribution&selectedChild=contribute" class="action-item crm-hover-button">
-					{$currencySymbol} {$p['contribution_id.total_amount']} $shared
-					</a></td>
-				<td>{$createdDate}</td>
-				</tr>
-EOT;
+				$appendText .='
+										<tr class="odd-row">
+											<td>'.$sequence.'</td>
+											<td>'.$startDate.'</td>
+											<td>'.$endDate.'</td>
+											<td>'.$p['membership_type_id.name'].'</td>
+											<td>'.$p['membership_duration_interval'].' '.$p['membership_duration_unit'].''.$multipleDurationIndicator.' </td>
+											<td>
+												<a href="/civicrm/contact/view/contribution?reset=1&id='.$p['contribution_id'].'&action=view&context=contribution&selectedChild=contribute" class="action-item crm-hover-button">
+												'.$currencySymbol.' '.$p['contribution_id.total_amount'].' '.$shared.'
+												</a></td>
+											<td>'.$createdDate.'</td>
+										</tr>';
 				$sequence++;
 			}
-
-			$appendText .= <<<EOT
-			</tbody>
-			</table>
-			</div>
-			</div>
-EOT;
+			$appendText .= '
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			';
 
 			$content .= $appendText;
-
-
 		}
 	} 
 }

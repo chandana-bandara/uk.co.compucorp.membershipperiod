@@ -64,6 +64,33 @@ class api_v3_MembershipPeriodDetail_GetformemberTest extends \PHPUnit_Framework_
       'duration_interval' => 1,
       'period_type' => MembershipPeriodType::FIXED,
       'name' => "Fixed 1 year membership",
+    ),
+    'rolling_1_month' => array(
+      'domain_id' => 1, // Default
+      'member_of_contact_id' => null, // Needs to fill in run time
+      'financial_type_id' => 2, 
+      'duration_unit' => MembershipDuration::MONTH,
+      'duration_interval' => 1,
+      'period_type' => MembershipPeriodType::ROLLING,
+      'name' => "Rolling 1 month membership",
+    ),
+    'rolling_1_day' => array(
+      'domain_id' => 1, // Default
+      'member_of_contact_id' => null, // Needs to fill in run time
+      'financial_type_id' => 2, 
+      'duration_unit' => MembershipDuration::DAY,
+      'duration_interval' => 1,
+      'period_type' => MembershipPeriodType::ROLLING,
+      'name' => "Rolling 1 day membership",
+    ),
+    'lifetime' => array(
+      'domain_id' => 1, // Default
+      'member_of_contact_id' => null, // Needs to fill in run time
+      'financial_type_id' => 2, 
+      'duration_unit' => MembershipDuration::LIFETIME,
+      'duration_interval' => 1,
+      'period_type' => MembershipPeriodType::ROLLING,
+      'name' => "Lifetime membership",
     )
   );
 
@@ -321,6 +348,178 @@ class api_v3_MembershipPeriodDetail_GetformemberTest extends \PHPUnit_Framework_
     $this->assertEquals(true,$membershipPeriodDetails[1]['shared_contribution']);
     $this->assertEquals($amount, $membershipPeriodDetails[1]['contribution_id.total_amount']);
   }
+
+
+  public function testPeriodDetailsRolling1Month1Term(){
+    $membershipId = $this->testMembershipId;
+    /* Create a new membership period */
+    $amount = 1000;
+    $contribution = $this->createContribution($this->testIndividualContactId, $amount);
+    $contributionId = $contribution['id'];
+    $numberOfTerms = 1;
+    $membershipTypeId = $this->membershipTypeIds['rolling_1_month'];
+
+    $startDate = "20181230000000";
+    $endDate = "20190129000000";
+
+    $membershipDurationUnit = MembershipDuration::MONTH;
+    $membershipDurationInterval = 1;
+
+    $membershipPeriodDetails = $this->createNewMembershipPeriodAndGetDetails($membershipId, $contributionId,$numberOfTerms,$membershipTypeId,$startDate, $endDate, $membershipDurationUnit, $membershipDurationInterval);
+
+    $this->assertEquals(1, count($membershipPeriodDetails));
+    $this->assertEquals(1, $membershipPeriodDetails[0]['number_of_periods']);
+    $this->assertEquals('2018-12-30', $membershipPeriodDetails[0]['start_date']);
+    $this->assertEquals('2019-01-29', $membershipPeriodDetails[0]['end_date']);
+    $this->assertEquals(MembershipDuration::MONTH, $membershipPeriodDetails[0]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[0]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['rolling_1_month']['name'], $membershipPeriodDetails[0]['membership_type_id.name']);
+    $this->assertEquals(false, @$membershipPeriodDetails[0]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[0]['contribution_id.total_amount']);
+  }
+
+  public function testPeriodDetailsRolling1Month2Terms(){
+    $membershipId = $this->testMembershipId;
+    /* Create a new membership period */
+    $amount = 1000;
+    $contribution = $this->createContribution($this->testIndividualContactId, $amount);
+    $contributionId = $contribution['id'];
+    $numberOfTerms = 2;
+    $membershipTypeId = $this->membershipTypeIds['rolling_1_month'];
+
+    $startDate = "20181230000000";
+    $endDate = "20190301000000";
+
+    $membershipDurationUnit = MembershipDuration::MONTH;
+    $membershipDurationInterval = 1;
+
+    $membershipPeriodDetails = $this->createNewMembershipPeriodAndGetDetails($membershipId, $contributionId,$numberOfTerms,$membershipTypeId,$startDate, $endDate, $membershipDurationUnit, $membershipDurationInterval);
+
+    $this->assertEquals(2, count($membershipPeriodDetails));
+
+    $this->assertEquals(2, $membershipPeriodDetails[0]['number_of_periods']);
+    $this->assertEquals('2018-12-30', $membershipPeriodDetails[0]['start_date']);
+    $this->assertEquals('2019-01-29', $membershipPeriodDetails[0]['end_date']);
+    $this->assertEquals(MembershipDuration::MONTH, $membershipPeriodDetails[0]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[0]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['rolling_1_month']['name'], $membershipPeriodDetails[0]['membership_type_id.name']);
+    $this->assertEquals(true, $membershipPeriodDetails[0]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[0]['contribution_id.total_amount']); 
+
+
+    $this->assertEquals(2, $membershipPeriodDetails[1]['number_of_periods']);
+    $this->assertEquals('2019-01-30', $membershipPeriodDetails[1]['start_date']);
+    $this->assertEquals('2019-03-01', $membershipPeriodDetails[1]['end_date']);
+    $this->assertEquals(MembershipDuration::MONTH, $membershipPeriodDetails[1]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[1]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['rolling_1_month']['name'], $membershipPeriodDetails[1]['membership_type_id.name']);
+    $this->assertEquals(true, $membershipPeriodDetails[1]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[1]['contribution_id.total_amount']);
+  }
+
+
+  public function testPeriodDetailsRolling1Day1Term(){
+    $membershipId = $this->testMembershipId;
+    /* Create a new membership period */
+    $amount = 1000;
+    $contribution = $this->createContribution($this->testIndividualContactId, $amount);
+    $contributionId = $contribution['id'];
+    $numberOfTerms = 1;
+    $membershipTypeId = $this->membershipTypeIds['rolling_1_day'];
+
+    $startDate = "20181230000000";
+    $endDate = "20190101000000";
+
+    $membershipDurationUnit = MembershipDuration::DAY;
+    $membershipDurationInterval = 1;
+
+    $membershipPeriodDetails = $this->createNewMembershipPeriodAndGetDetails($membershipId, $contributionId,$numberOfTerms,$membershipTypeId,$startDate, $endDate, $membershipDurationUnit, $membershipDurationInterval);
+
+    $this->assertEquals(1, count($membershipPeriodDetails));
+    $this->assertEquals(1, $membershipPeriodDetails[0]['number_of_periods']);
+    $this->assertEquals('2018-12-30', $membershipPeriodDetails[0]['start_date']);
+    $this->assertEquals('2019-01-01', $membershipPeriodDetails[0]['end_date']);
+    $this->assertEquals(MembershipDuration::DAY, $membershipPeriodDetails[0]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[0]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['rolling_1_day']['name'], $membershipPeriodDetails[0]['membership_type_id.name']);
+    $this->assertEquals(false, @$membershipPeriodDetails[0]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[0]['contribution_id.total_amount']);
+  }
+
+
+  public function testPeriodDetailsRolling1Day2Terms(){
+    $membershipId = $this->testMembershipId;
+    /* Create a new membership period */
+    $amount = 1000;
+    $contribution = $this->createContribution($this->testIndividualContactId, $amount);
+    $contributionId = $contribution['id'];
+    $numberOfTerms = 2;
+    $membershipTypeId = $this->membershipTypeIds['rolling_1_day'];
+
+    $startDate = "20180101000000";
+    $endDate = "20180102000000";
+
+    $membershipDurationUnit = MembershipDuration::DAY;
+    $membershipDurationInterval = 1;
+
+    $membershipPeriodDetails = $this->createNewMembershipPeriodAndGetDetails($membershipId, $contributionId,$numberOfTerms,$membershipTypeId,$startDate, $endDate, $membershipDurationUnit, $membershipDurationInterval);
+
+    $this->assertEquals(2, count($membershipPeriodDetails));
+    
+    $this->assertEquals(2, $membershipPeriodDetails[0]['number_of_periods']);
+    $this->assertEquals('2018-01-01', $membershipPeriodDetails[0]['start_date']);
+    $this->assertEquals('2018-01-01', $membershipPeriodDetails[0]['end_date']);
+    $this->assertEquals(MembershipDuration::DAY, $membershipPeriodDetails[0]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[0]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['rolling_1_day']['name'], $membershipPeriodDetails[0]['membership_type_id.name']);
+    $this->assertEquals(true, @$membershipPeriodDetails[0]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[0]['contribution_id.total_amount']);
+
+    $this->assertEquals(2, $membershipPeriodDetails[1]['number_of_periods']);
+    $this->assertEquals('2018-01-02', $membershipPeriodDetails[1]['start_date']);
+    $this->assertEquals('2018-01-02', $membershipPeriodDetails[1]['end_date']);
+    $this->assertEquals(MembershipDuration::DAY, $membershipPeriodDetails[1]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[1]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['rolling_1_day']['name'], $membershipPeriodDetails[1]['membership_type_id.name']);
+    $this->assertEquals(true, @$membershipPeriodDetails[1]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[1]['contribution_id.total_amount']);
+  }
+
+
+
+  public function testPeriodDetailsLifetimeTerm(){
+    $membershipId = $this->testMembershipId;
+    /* Create a new membership period */
+    $amount = 1000;
+    $contribution = $this->createContribution($this->testIndividualContactId, $amount);
+    $contributionId = $contribution['id'];
+    $numberOfTerms = 1;
+    $membershipTypeId = $this->membershipTypeIds['lifetime'];
+
+    $startDate = "20180101000000";
+    $endDate =   "99991231000000";
+
+    $membershipDurationUnit = MembershipDuration::LIFETIME;
+    $membershipDurationInterval = 1;
+
+    $membershipPeriodDetails = $this->createNewMembershipPeriodAndGetDetails($membershipId, $contributionId,$numberOfTerms,$membershipTypeId,$startDate, $endDate, $membershipDurationUnit, $membershipDurationInterval);
+
+    $this->assertEquals(1, count($membershipPeriodDetails));
+    
+    $this->assertEquals(1, $membershipPeriodDetails[0]['number_of_periods']);
+    $this->assertEquals('2018-01-01', $membershipPeriodDetails[0]['start_date']);
+    $this->assertEquals('-', $membershipPeriodDetails[0]['end_date']);
+    $this->assertEquals(MembershipDuration::LIFETIME, $membershipPeriodDetails[0]['membership_duration_unit']);
+    $this->assertEquals(1, $membershipPeriodDetails[0]['membership_duration_interval']);
+    $this->assertEquals($this->testMembershipTypeParams['lifetime']['name'], $membershipPeriodDetails[0]['membership_type_id.name']);
+    $this->assertEquals(false, @$membershipPeriodDetails[0]['shared_contribution']);
+    $this->assertEquals($amount, $membershipPeriodDetails[0]['contribution_id.total_amount']);
+
+   
+  }
+
+
+
 
   /**
    * Creates a Membership (including contribution) and membership period detail
