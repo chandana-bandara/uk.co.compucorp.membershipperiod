@@ -19,7 +19,7 @@ This extension has not yet been published for installation via the web UI.
 
 1. Download the zip file from the Github repository
 2. Extract the zip file downloaded above. The extraction should contain a folder named "uk.co.compucorp.membershipperiod" and copy that folder in to the CiviCRM extensions directory
-3. Log in to CiviCRM and visit Administrator -> System Settings -> Extensions
+3. Log in to CiviCRM and from the top menu, visit Administer -> System Settings -> Extensions
 4. Click on "Refresh" button
 5. The new extension name "Membership Period" should appear on the extensions list
 6. Click "Install" and from the next page again click on "Install"
