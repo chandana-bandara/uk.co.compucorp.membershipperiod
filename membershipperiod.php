@@ -464,18 +464,27 @@ EOT;
 				/* Whether the contribution made for multiple membership periods */
 				$shared = ($p['shared_contribution'] == 1) ? "(Shared)" : "";
 				
+
+				$startDateObj = new \DateTime($p['start_date']);
+				$startDate = $startDateObj->format('D jS \of M Y');
+				$endDateObj = new \DateTime($p['end_date']);
+				$endDate = $endDateObj->format('D jS \of M Y');
+
+				$createdDateObj = new \DateTime($p['created_at']);
+				$createdDate = $createdDateObj->format('D jS \of M Y');
+
 				$appendText .= <<<EOT
 				<tr class="odd-row">
 				<td>$sequence</td>
-				<td>{$p['start_date']}</td>
-				<td>{$p['end_date']}</td>
+				<td>{$startDate}</td>
+				<td>{$endDate}</td>
 				<td>{$p['membership_type_id.name']}</td>
 				<td>{$p['membership_duration_interval']} {$p['membership_duration_unit']}{$multipleDurationIndicator} </td>
 				<td>
 					<a href="/civicrm/contact/view/contribution?reset=1&id={$p['contribution_id']}&action=view&context=contribution&selectedChild=contribute" class="action-item crm-hover-button">
 					{$currencySymbol} {$p['contribution_id.total_amount']} $shared
 					</a></td>
-				<td>{$p['created_at']}</td>
+				<td>{$createdDate}</td>
 				</tr>
 EOT;
 				$sequence++;

@@ -1,5 +1,5 @@
 Package: uk.co.compucorp.membershipperiod
-Copyright (C) 2017, FIXME <FIXME>
+Copyright (C) 2017
 Licensed under the GNU Affero Public License 3.0 (below).
 
 -------------------------------------------------------------------------------
