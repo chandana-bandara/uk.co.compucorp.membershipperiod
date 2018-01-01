@@ -45,3 +45,7 @@ In the membership view interfaces, there should be a separate section called "Me
 
 ## Known Issues
 The membership period details will not change when "Edit" memberships (not Renewals). The edit interfaces allows manual membership start and end date edits and that gets complicated with the membership history. The implementation needs a technical and logical conversation with the core team to finalize a suitable logic.
+
+Auto renewal of the memberships may not update the membership periods
+
+Fixed Membership types with rollover days may incur exexpected membership period results
