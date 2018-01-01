@@ -7,8 +7,8 @@ use Civi\Test\TransactionalInterface;
 use CRM_Membershipperiod_BAO_MembershipPeriodMembershipDuration as MembershipDuration;
 use CRM_Membershipperiod_BAO_MembershipPeriodMembershipPeriodType as MembershipPeriodType;
 /**
-* This test checks proper functionality of the Gerformember api call. The test creates memberships with and without a contribution as weill
-* as with single and multiple term creation/renewals.
+* This test checks proper functionality of the Gerformember api call. The test creates memberships with and without a contribution as 
+* well as with single and multiple term creation/renewals.
 *
 * Tips:
 *  - With HookInterface, you may implement CiviCRM hooks directly in the test class.
