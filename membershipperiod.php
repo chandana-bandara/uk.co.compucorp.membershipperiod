@@ -364,6 +364,8 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 	
 	if ($tplName == "CRM/Member/Page/Tab.tpl"){
 		
+		// $content .= serialize($object);
+
 		$action = @$object->getVar('_action');
 
 		if ($action == 4){
@@ -377,8 +379,9 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 			$membershipPeriods = $MembershipPeriodDetails['values'];
 
 			$appendText  = '
-				<div class="crm-container">
-					<div class="class="crm-block crm-content-block crm-membership-view-form-block">
+				
+				<div id="crm-membership-details-view" class="crm-container" style="margin-top:5px;">
+					<div class="crm-block crm-content-block crm-membership-view-form-block">
 						<div class="crm-accordion-wrapper">
 							<div class="crm-accordion-header">'.E::ts('Membership Period Details').'</div>
 							<div class="crm-accordion-body">
@@ -468,9 +471,15 @@ function membershipperiod_civicrm_alterContent( &$content, $context, $tplName, &
 						</div>
 					</div>
 				</div>
+
+				<script type="text/javascript">
+					CRM.$(function(){
+						CRM.$("#crm-membership-details-view").appendTo(CRM.$(".crm-accordion-wrapper"));
+					});
+				</script>
 			';
 
 			$content .= $appendText;
 		}
-	} 
+	}  
 }
