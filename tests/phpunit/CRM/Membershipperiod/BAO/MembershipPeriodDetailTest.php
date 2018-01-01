@@ -8,7 +8,7 @@ use Civi\Test\TransactionalInterface;
 use CRM_Membershipperiod_BAO_MembershipPeriodMembershipDuration as MembershipDuration;
 use CRM_Membershipperiod_BAO_MembershipPeriodMembershipPeriodType as MembershipPeriodType;
 /**
-* FIXME - Add test description.
+* This file tests the basic BAO data creation functionality
 *
 * Tips:
 *  - With HookInterface, you may implement CiviCRM hooks directly in the test class.
@@ -75,8 +75,6 @@ class CRM_Membershipperiod_BAO_MembershipPeriodDetailTest extends \PHPUnit_Frame
 
 
 	public function setUpHeadless() {
-// Civi\Test has many helpers, like install(), uninstall(), sql(), and sqlFile().
-// See: https://github.com/civicrm/org.civicrm.testapalooza/blob/master/civi-test.md
 		return \Civi\Test::headless()
 		->installMe(__DIR__)
 		->apply();
@@ -102,9 +100,7 @@ class CRM_Membershipperiod_BAO_MembershipPeriodDetailTest extends \PHPUnit_Frame
 
 		$this->testIndividualContactId = $result['id'];
 		/* For this test, we create several membership types */
-
 		/* Create membership types */
-
 		foreach ($this->testMembershipTypeParams as $k => $v){
 			$this->testMembershipTypeParams[$k]['member_of_contact_id'] = $this->testIndividualContactId;
 			$result = civicrm_api3('MembershipType', 'create', $this->testMembershipTypeParams[$k]);
@@ -130,8 +126,8 @@ class CRM_Membershipperiod_BAO_MembershipPeriodDetailTest extends \PHPUnit_Frame
 	public function tearDown() {
 		parent::tearDown();
 	}
+
 	public function testCreateMembershipWithoutContribution(){
-		/* Create 1 year rolling membership period detail */
 		$joinDate = '20171231203200';
 		$membershipStartDate = '20171231000000';
 		$membershipEndDate = '20181230000000';
@@ -159,7 +155,6 @@ class CRM_Membershipperiod_BAO_MembershipPeriodDetailTest extends \PHPUnit_Frame
 	}
 
 	public function testCreateMembershipWithContribution(){
-		/* Create 1 year rolling membership period detail */
 		$amount = 1000;
 		$joinDate = '20171231203200';
 		$membershipStartDate = '20171231000000';
