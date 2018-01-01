@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+	<base>CRM/Membershipperiod</base>
+	<class>MembershipPeriodDetail</class>
+	<name>civicrm_membership_period_detail</name>
+	<comment>Records the membership period related information (membership id, contribution id, number of terms, start date, end date, membership duration unit, membership duration interval, time stamp) when creating or renewing a membership.</comment>
+	<add>4.7</add>
+	<log>true</log>
+
+	<field>
+		<name>id</name>
+		<type>int unsigned</type>
+		<required>true</required>
+		<comment>Unique Membership Period Detail ID</comment>
+		<add>4.7</add>
+	</field>
+	<primaryKey>
+		<name>id</name>
+		<autoincrement>true</autoincrement>
+	</primaryKey>
+
+	<field>
+		<name>membership_id</name>
+		<type>int unsigned</type>
+		<required>true</required>
+		<comment>FK to Membership</comment>
+		<add>4.7</add>
+	</field>
+	<foreignKey>
+		<name>membership_id</name>
+		<table>civicrm_membership</table>
+		<key>id</key>
+		<add>4.7</add>
+		<onDelete>CASCADE</onDelete>
+	</foreignKey>
+
+	<field>
+		<name>currency_code</name>
+		<type>text</type>
+		<required>true</required>
+		<comment>Currency code e.g. USD</comment>
+		<add>4.7</add>
+	</field>
+
+	<field>
+		<name>contribution_id</name>
+		<type>int unsigned</type>
+		<required>false</required>
+		<default>NULL</default>
+		<comment>FK to Contribution</comment>
+		<add>4.7</add>
+	</field>
+	<foreignKey>
+		<name>contribution_id</name>
+		<table>civicrm_contribution</table>
+		<key>id</key>
+		<add>4.7</add>
+		<onDelete>SET NULL</onDelete>
+	</foreignKey>
+
+	<field>
+		<name>membership_type_id</name>
+		<type>int unsigned</type>
+		<required>false</required>
+		<default>NULL</default>
+		<comment>FK to Membership Type</comment>
+		<add>4.7</add>
+	</field>
+	<foreignKey>
+		<name>membership_type_id</name>
+		<table>civicrm_membership_type</table>
+		<key>id</key>
+		<add>4.7</add>
+		<onDelete>SET NULL</onDelete>
+	</foreignKey>
+
+	<field>
+		<name>number_of_periods</name>
+		<type>int unsigned</type>
+		<required>true</required>
+		<comment>Number of membership periods this membership commencement/renewal corresponds to</comment>
+		<add>4.7</add>
+	</field>
+
+	<field>
+		<name>start_date</name>
+		<type>date</type>
+		<required>true</required>
+		<comment>Starting date of the related membership period(s)</comment>
+		<add>4.7</add>
+	</field>
+
+	<field>
+		<name>end_date</name>
+		<type>date</type>
+		<required>true</required>
+		<comment>Ending date of the related membership period(s)</comment>
+		<add>4.7</add>
+	</field>
+
+	<field>
+		<name>membership_duration_unit</name>
+		<type>text</type>
+		<required>true</required>
+		<comment>Membership duration unit. E.g. day, week, month, year</comment>
+		<add>4.7</add> 
+	</field>
+
+	<field>
+		<name>membership_duration_interval</name>
+		<type>int unsigned</type>
+		<required>true</required>
+		<comment>Membership duration interval. E.g. 1(year), 60(days)</comment>
+		<add>4.7</add> 
+	</field>
+
+	<field>
+		<name>created_at</name>
+		<type>timestamp</type>
+		<required>true</required>
+		<comment>Timestamp of the operation</comment>
+		<add>4.7</add> 
+	</field>
+</table>
